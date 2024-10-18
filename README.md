@@ -1,8 +1,5 @@
 # NFC Antenna Coil Generator
 
-## Author: Tanguy Dietrich
-## Date: 2024-10-18
-
 ### Overview
 This script automates the process of computing the necessary parameters for an NFC antenna coil based on a specified capacitance. It generates the following files:
 - An image of the computed coil geometry.
@@ -28,3 +25,38 @@ You can install the required Python libraries with:
 
 ```bash
 pip install numpy matplotlib
+pip install numpy
+```
+
+### Usage
+First you need to adapt the constants based on your requirements. The following parameters can be adjusted:
+```Python
+CAPACITANCE_CHIP = 28.5e-12 # 28.5 pF
+RESONANT_FREQUENCY = 13.56e6 # 13.56 MHz
+
+DEFAULT_MIN_LENGTH = 10
+DEFAULT_MAX_LENGTH = 25
+DEFAULT_STEP_LENGTH = 0.01
+
+DEFAULT_MIN_TURNS = 5
+DEFAULT_MAX_TURNS = 20
+DEFAULT_STEP_TURNS = 1
+
+DEFAULT_MIN_WIDTH = 0.25
+DEFAULT_MAX_WIDTH = 1.0
+DEFAULT_STEP_WIDTH = 0.05
+
+DEFAULT_MIN_SPACING = 0.25
+DEFAULT_MAX_SPACING = 1.0
+DEFAULT_STEP_SPACING = 0.05
+```
+Then run the code with:
+```bash
+python3 main.py
+```
+
+# example of output
+![Bash output](img/bash.png)
+![KiCad footprint](img/kicad.png)
+![MatplotLib](img/matplotlib.png)
+
