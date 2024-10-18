@@ -1,13 +1,13 @@
 (module "NFC_COIL"
 	(version 20240108)
-	(generator "pcbnew")
-	(generator_version "8.0")
+	(generator "Kicad-NFC-Coil_Generator")
+	(generator_version "1.0")
 	(layer "F.Cu")
-	(property "Reference" "REF**"
+	(property "Reference" "L**"
 		(at 0 -0.5 0)
 		(unlocked yes)
 		(layer "F.SilkS")
-		(uuid "f152c06c-806c-50c4-7380-eb85f7b13c9e")
+		(uuid "6cd22535-3872-1a50-1cec-2917a81cd4d6")
 		(effects
 			(font
 				(size 1 1)
@@ -15,11 +15,11 @@
 			)
 		)
 	)
-	(property "Value" "NFC_COIL"
+	(property "Value" "4.83 uH"
 		(at 0 1 0)
 		(unlocked yes)
 		(layer "F.Fab")
-		(uuid "2b04efa0-514a-4f68-41de-fb3ef57f89ed")
+		(uuid "389afd86-43d7-a88d-f31a-5d52f153c321")
 		(effects
 			(font
 				(size 1 1)
@@ -32,7 +32,7 @@
 		(unlocked yes)
 		(layer "F.Fab")
 		(hide yes)
-		(uuid "98737973-2650-e139-7b16-575770df3e3d")
+		(uuid "a39f1e74-d911-455e-f8f1-7e7736f25b71")
 		(effects
 			(font
 				(size 1 1)
@@ -45,7 +45,7 @@
 		(unlocked yes)
 		(layer "F.Fab")
 		(hide yes)
-		(uuid "813bde26-8ba6-9fdf-fdcf-f2b04a2d510d")
+		(uuid "9e66a391-8fa7-655d-b950-93506c96c316")
 		(effects
 			(font
 				(size 1 1)
@@ -58,7 +58,7 @@
 		(unlocked yes)
 		(layer "F.Fab")
 		(hide yes)
-		(uuid "b9b41619-e761-b21c-b855-9d93b83d136c")
+		(uuid "112311ef-e1ed-64ee-b9b6-3da32035c1a6")
 		(effects
 			(font
 				(size 1 1)
@@ -225,6 +225,20 @@
 		)
 		(fill solid)
 		(layer "F.Cu")
-		(uuid "7348cb38-a59f-c32a-ba83-51e4e6579a16")
+		(uuid "ea5e6186-eb77-7505-60c2-909cddcc7c33")
+	)
+	(pad "1" smd rect
+		(at -0.12 -0.12)
+		(size 0.250 0.250)
+		(layers "F.Cu" "F.Paste" "F.Mask")
+		(thermal_bridge_angle 45)
+		(uuid "1f8de272-3871-b89c-24b3-661b35e13db3")
+	)
+	(pad "2" smd rect
+		(at 14.43 -10.28)
+		(size 0.250 0.250)
+		(layers "F.Cu" "F.Paste" "F.Mask")
+		(thermal_bridge_angle 45)
+		(uuid "165fc6f4-fb6e-cf72-0a60-30427e4ee5d0")
 	)
 )

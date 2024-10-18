@@ -58,6 +58,7 @@ if __name__ == '__main__':
     turns = optimal_params[1]
     width = optimal_params[2]
     spacing = optimal_params[3]
+    inductance = optimal_params[4]
     print('Optimal Parameters Computed:')
     print('  Outer Length: {:.2f} mm'.format(antenna_size))
     print('  Turns: {}'.format(turns))
@@ -81,7 +82,7 @@ if __name__ == '__main__':
 
     # Generate the KiCad .kicad_mod file
     filename = 'NFC_COIL.kicad_mod'
-    ck.generate_nfc_kicad_mod_file(filename, xy_points)
+    ck.generate_nfc_kicad_mod_file(filename, xy_points, inductance, turns, width, spacing)
     print(f"KiCad module saved to {filename}")
     ci.generate_nfc_dxf_file(xy_points, 'NFC_COIL.dxf')
     print("DXF file saved to NFC_COIL.dxf")

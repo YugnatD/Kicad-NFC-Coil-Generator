@@ -11,16 +11,16 @@ def generate_uuid():
         random.getrandbits(16), random.getrandbits(16),
         random.getrandbits(48))
 
-def generate_nfc_kicad_mod_file(filename, xy_points):
+def generate_nfc_kicad_mod_file(filename, xy_points, L, turns, width, spacing):
     # Open the file for writing
     with open(filename, 'w') as f:
         # Write the header
         f.write('(module "NFC_COIL"\n')
         f.write('\t(version 20240108)\n')
-        f.write('\t(generator "pcbnew")\n')
-        f.write('\t(generator_version "8.0")\n')
+        f.write('\t(generator "Kicad-NFC-Coil_Generator")\n')
+        f.write('\t(generator_version "1.0")\n')
         f.write('\t(layer "F.Cu")\n')
-        f.write('\t(property "Reference" "REF**"\n')
+        f.write('\t(property "Reference" "L**"\n')
         f.write('\t\t(at 0 -0.5 0)\n')
         f.write('\t\t(unlocked yes)\n')
         f.write('\t\t(layer "F.SilkS")\n')
@@ -32,7 +32,8 @@ def generate_nfc_kicad_mod_file(filename, xy_points):
         f.write('\t\t\t)\n')
         f.write('\t\t)\n')
         f.write('\t)\n')
-        f.write('\t(property "Value" "NFC_COIL"\n')
+        # f.write('\t(property "Value" "NFC_COIL"\n')
+        f.write('\t(property "Value" "'+ "{:.2f} uH".format(L*1e6)+'"\n')
         f.write('\t\t(at 0 1 0)\n')
         f.write('\t\t(unlocked yes)\n')
         f.write('\t\t(layer "F.Fab")\n')
@@ -97,92 +98,26 @@ def generate_nfc_kicad_mod_file(filename, xy_points):
         f.write('\t\t(layer "F.Cu")\n')
         f.write('\t\t(uuid "' + generate_uuid() + '")\n')
         f.write('\t)\n')
+        # then add pad for the coil
+        # get the position of the last point
+        x, y = xy_points[-1]
+        # add the pad
+        f.write('\t(pad "1" smd rect\n')
+        f.write('\t\t(at {:.2f} {:.2f})\n'.format(x-width/2, y+width/2))
+        f.write('\t\t(size {:.3f} {:.3f})\n'.format(width, width))
+        f.write('\t\t(layers "F.Cu" "F.Paste" "F.Mask")\n')
+        f.write('\t\t(thermal_bridge_angle 45)\n')
+        f.write('\t\t(uuid "' + generate_uuid() + '")\n')
+        f.write('\t)\n')
+        # second pad
+        # get the position middle point
+        x, y = xy_points[len(xy_points)//2]
+        # add the pad
+        f.write('\t(pad "2" smd rect\n')
+        f.write('\t\t(at {:.2f} {:.2f})\n'.format(x-width/2,y-width/2))
+        f.write('\t\t(size {:.3f} {:.3f})\n'.format(width, width))
+        f.write('\t\t(layers "F.Cu" "F.Paste" "F.Mask")\n')
+        f.write('\t\t(thermal_bridge_angle 45)\n')
+        f.write('\t\t(uuid "' + generate_uuid() + '")\n')
+        f.write('\t)\n')
         f.write(')\n')
-
-
-
-
-
-# example of kicad_mod file
-# (footprint "NFC_COIL"
-# 	(version 20240108)
-# 	(generator "pcbnew")
-# 	(generator_version "8.0")
-# 	(layer "F.Cu")
-# 	(property "Reference" "REF**"
-# 		(at 0 -0.5 0)
-# 		(unlocked yes)
-# 		(layer "F.SilkS")
-# 		(uuid "5f3bc181-5f17-43c0-b860-2786212932d0")
-# 		(effects
-# 			(font
-# 				(size 1 1)
-# 				(thickness 0.1)
-# 			)
-# 		)
-# 	)
-# 	(property "Value" "NFC_COIL"
-# 		(at 0 1 0)
-# 		(unlocked yes)
-# 		(layer "F.Fab")
-# 		(uuid "ee6a6e4a-abc2-4dc7-b089-36833ec2f627")
-# 		(effects
-# 			(font
-# 				(size 1 1)
-# 				(thickness 0.15)
-# 			)
-# 		)
-# 	)
-# 	(property "Footprint" ""
-# 		(at 0 0 0)
-# 		(unlocked yes)
-# 		(layer "F.Fab")
-# 		(hide yes)
-# 		(uuid "9e784775-56c5-49bf-9b55-32ed9849a966")
-# 		(effects
-# 			(font
-# 				(size 1 1)
-# 				(thickness 0.15)
-# 			)
-# 		)
-# 	)
-# 	(property "Datasheet" ""
-# 		(at 0 0 0)
-# 		(unlocked yes)
-# 		(layer "F.Fab")
-# 		(hide yes)
-# 		(uuid "071e8870-d245-4677-aa43-73ee668e563f")
-# 		(effects
-# 			(font
-# 				(size 1 1)
-# 				(thickness 0.15)
-# 			)
-# 		)
-# 	)
-# 	(property "Description" ""
-# 		(at 0 0 0)
-# 		(unlocked yes)
-# 		(layer "F.Fab")
-# 		(hide yes)
-# 		(uuid "4acfa58a-fe6a-4264-982c-edaac1559bb1")
-# 		(effects
-# 			(font
-# 				(size 1 1)
-# 				(thickness 0.15)
-# 			)
-# 		)
-# 	)
-# 	(attr smd)
-#   (fp_poly
-# 	(pts
-# 		(xy 198.26 -643.89) (xy 274.74 -573.79) (xy 288.76 -647.72)
-# 	)
-# 	(stroke
-# 		(width 0.01)
-# 		(type solid)
-# 	)
-# 	(fill solid)
-# 	(layer "F.Cu")
-# 	(uuid "09213631-4e9b-40ad-8d54-59efaf75aac8")
-# 	)
-# )
