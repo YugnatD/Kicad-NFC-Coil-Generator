@@ -52,6 +52,11 @@ def find_optimal_parameters(target_inductance, length_range, turns_range, width_
     
     # Iterate over all combinations of parameters
     for outer_length_mm, n_turns, trace_width_mm, spacing_mm in product(length_range, turns_range, width_range, spacing_range):
+        # first check if the parameters are valid the antenna must be physically possible
+        if outer_length_mm <= 0 or n_turns <= 0 or trace_width_mm <= 0 or spacing_mm <= 0:
+            continue
+        if 2 * n_turns * (trace_width_mm + spacing_mm) >= outer_length_mm:
+            continue
         inductance = compute_coil_inductance(n_turns, outer_length_mm, trace_width_mm, spacing_mm)
         difference = abs(inductance - target_inductance)
         
