@@ -96,13 +96,13 @@ def generate_nfc_antenna_spiral(turns, width, spacing, antenna_size):
     radial_step = (width + spacing) / (2 * np.pi)  # Radial increment per radian for the centerline
     
     # Generate spiral coordinates starting from min_radius
-    theta = np.linspace(0, (2 * np.pi * turns)-2*np.pi, turns * 100)  # Ensure it finishes on a full turn
+    theta = np.linspace(0, (2 * np.pi * turns), turns * 100)  # Ensure it finishes on a full turn
     
     for t in theta:
         r_inner = min_radius + t * radial_step - width / 2
         r_outer = min_radius + t * radial_step + width / 2
-        if r_outer > max_radius:  # Stop if we exceed the outer diameter
-            break
+        # if r_outer > max_radius:  # Stop if we exceed the outer diameter
+        #     break
         x_inner.append(r_inner * np.cos(t))
         y_inner.append(r_inner * np.sin(t))
         x_outer.append(r_outer * np.cos(t))

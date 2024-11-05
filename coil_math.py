@@ -44,11 +44,9 @@ def compute_coil_inductance_spiral(n_turns, outer_length_mm, trace_width_mm, spa
 
     # Constants
     mu_0 = 4 * math.pi * 1e-7  # Permeability of free space in H/m
-    mu_r = 2.7 # 2.7 for PLA, 1 for air
-    mu_eff = mu_0 * mu_r  # Effective permeability in H/m
 
     # Using the formula to calculate inductance
-    L_circ = 31.33 * mu_eff * (n_turns**2) * (average_radius**2) / (8 * average_radius + 11 * radial_thickness)
+    L_circ = 31.33 * mu_0 * (n_turns**2) * (average_radius**2) / (8 * average_radius + 11 * radial_thickness)
     return L_circ
 
 # Resonant frequency formula: f = 1 / (2 * pi * sqrt(L * C))
