@@ -31,22 +31,25 @@ def compute_coil_inductance_rect(n_turns, outer_length_mm, trace_width_mm, spaci
     return L
 
 def compute_coil_inductance_spiral(n_turns, outer_length_mm, trace_width_mm, spacing_mm):
+    outer_radius = outer_length_mm / 2 / 1000  # Convert outer radius to meters
+    trace_width_m = trace_width_mm / 1000  # Convert trace width to meters
+    spacing_m = spacing_mm / 1000  # Convert spacing to meters
+
+    # Calculate radial thickness c (difference between outer and inner radius)
+    radial_thickness = n_turns * (trace_width_m + spacing_m) - spacing_m
+
+    # Calculate average radius a
+    inner_radius = outer_radius - radial_thickness  # Inner radius in meters
+    average_radius = (outer_radius + inner_radius) / 2  # Average radius in meters
+
     # Constants
     mu_0 = 4 * math.pi * 1e-7  # Permeability of free space in H/m
-    
-    d_out = outer_length_mm / 1000
-    w = trace_width_mm / 1000
-    s = spacing_mm / 1000
-    n = n_turns
-    d_in = d_out - 2 * n * (w + s)
+    mu_r = 2.7 # 2.7 for PLA, 1 for air
+    mu_eff = mu_0 * mu_r  # Effective permeability in H/m
 
-    a = (d_in + d_out) / 4
-    # d_avg = (d_out + d_in) / 2
-    c = (d_out - d_in) / 2
-    if d_in + d_out == 0:
-        rho = 0
-        return np.nan
-    return 31.33 * mu_0 * n**2 * ((a**2) / (8*a + 11*c))
+    # Using the formula to calculate inductance
+    L_circ = 31.33 * mu_eff * (n_turns**2) * (average_radius**2) / (8 * average_radius + 11 * radial_thickness)
+    return L_circ
 
 # Resonant frequency formula: f = 1 / (2 * pi * sqrt(L * C))
 def compute_resonant_F(L, C):
