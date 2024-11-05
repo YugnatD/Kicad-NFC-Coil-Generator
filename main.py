@@ -22,24 +22,28 @@ import coil_math as cm
 # based on https://www.translatorscafe.com/unit-converter/bg/calculator/planar-coil-inductance/
 # and https://goodcalculators.com/resonant-frequency-calculator/
 
-CAPACITANCE_CHIP = 28.5e-12 # 28.5 pF
+CAPACITANCE_CHIP = 29.5e-12 # 28.5 pF
 RESONANT_FREQUENCY = 13.56e6 # 13.56 MHz
 
-DEFAULT_MIN_LENGTH = 10
-DEFAULT_MAX_LENGTH = 25
+# DESIGN_STYLES = "rectangular"
+DESIGN_STYLES = "spiral"
+
+DEFAULT_MIN_LENGTH = 50
+DEFAULT_MAX_LENGTH = 55
 DEFAULT_STEP_LENGTH = 0.01
 
 DEFAULT_MIN_TURNS = 5
-DEFAULT_MAX_TURNS = 25
+DEFAULT_MAX_TURNS = 15
 DEFAULT_STEP_TURNS = 1
 
-DEFAULT_MIN_WIDTH = 0.25
+DEFAULT_MIN_WIDTH = 0.6
 DEFAULT_MAX_WIDTH = 1.5
-DEFAULT_STEP_WIDTH = 0.05
+DEFAULT_STEP_WIDTH = 1.0
 
-DEFAULT_MIN_SPACING = 0.25
-DEFAULT_MAX_SPACING = 1.5
-DEFAULT_STEP_SPACING = 0.05
+DEFAULT_MIN_SPACING = 1.2
+DEFAULT_MAX_SPACING = 5.0
+DEFAULT_STEP_SPACING = 0.1
+
 
 if __name__ == '__main__':
     # compute the inductance of the coil needed
@@ -51,8 +55,12 @@ if __name__ == '__main__':
     turns_range = np.arange(DEFAULT_MIN_TURNS, DEFAULT_MAX_TURNS, DEFAULT_STEP_TURNS)
     width_range = np.arange(DEFAULT_MIN_WIDTH, DEFAULT_MAX_WIDTH, DEFAULT_STEP_WIDTH)
     spacing_range = np.arange(DEFAULT_MIN_SPACING, DEFAULT_MAX_SPACING, DEFAULT_STEP_SPACING)
-    # find the optimal parameters to match the target inductance
-    optimal_params = cm.find_optimal_parameters(inductance_cible, length_range, turns_range, width_range, spacing_range)
+    if DESIGN_STYLES == "rectangular":
+        # find the optimal parameters to match the target inductance
+        optimal_params = cm.find_optimal_parameters(inductance_cible, length_range, turns_range, width_range, spacing_range, func=cm.compute_coil_inductance_rect)
+    elif DESIGN_STYLES == "spiral":
+        # find the optimal parameters to match the target inductance
+        optimal_params = cm.find_optimal_parameters(inductance_cible, length_range, turns_range, width_range, spacing_range, func=cm.compute_coil_inductance_spiral)
     # print the optimal parameters
     antenna_size = optimal_params[0]
     turns = optimal_params[1]
@@ -66,7 +74,10 @@ if __name__ == '__main__':
     print('  Spacing: {:.2f} mm'.format(spacing))
     print('  Inductance: {:.2f} uH\r\n'.format(optimal_params[-1] * 1e6))
     # Generate points
-    xy_points = ci.generate_nfc_antenna(turns, width, spacing, antenna_size)
+    if DESIGN_STYLES == "rectangular":
+        xy_points = ci.generate_nfc_antenna_rect(turns, width, spacing, antenna_size)
+    elif DESIGN_STYLES == "spiral":
+        xy_points = ci.generate_nfc_antenna_spiral(turns, width, spacing, antenna_size)
     antenna_points = np.array(xy_points)
     # Create the polygon from the points
     polygon = Polygon(antenna_points, closed=True, fill=True, edgecolor='brown', facecolor='orange')

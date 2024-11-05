@@ -7,7 +7,7 @@ import numpy as np
 
 
 # modified Harold A Wheeler formula for rectangular coils
-def compute_coil_inductance(n_turns, outer_length_mm, trace_width_mm, spacing_mm):
+def compute_coil_inductance_rect(n_turns, outer_length_mm, trace_width_mm, spacing_mm):
     # Constants
     mu_0 = 4 * math.pi * 1e-7  # Permeability of free space in H/m
     
@@ -28,9 +28,25 @@ def compute_coil_inductance(n_turns, outer_length_mm, trace_width_mm, spacing_mm
 
     # Wheeler's formula
     L = k1 * mu_0 * ( (d_avg*n**2) / (1+k2*rho) )
-
     return L
 
+def compute_coil_inductance_spiral(n_turns, outer_length_mm, trace_width_mm, spacing_mm):
+    # Constants
+    mu_0 = 4 * math.pi * 1e-7  # Permeability of free space in H/m
+    
+    d_out = outer_length_mm / 1000
+    w = trace_width_mm / 1000
+    s = spacing_mm / 1000
+    n = n_turns
+    d_in = d_out - 2 * n * (w + s)
+
+    a = (d_in + d_out) / 4
+    # d_avg = (d_out + d_in) / 2
+    c = (d_out - d_in) / 2
+    if d_in + d_out == 0:
+        rho = 0
+        return np.nan
+    return 31.33 * mu_0 * n**2 * ((a**2) / (8*a + 11*c))
 
 # Resonant frequency formula: f = 1 / (2 * pi * sqrt(L * C))
 def compute_resonant_F(L, C):
@@ -46,7 +62,7 @@ def compute_resonant_C(f, L):
 
 
 # Function to search for optimal parameters to match target inductance
-def find_optimal_parameters(target_inductance, length_range, turns_range, width_range, spacing_range):
+def find_optimal_parameters(target_inductance, length_range, turns_range, width_range, spacing_range, func=compute_coil_inductance_rect):
     best_params = None
     best_difference = float('inf')  # Start with a large difference
     
@@ -57,7 +73,8 @@ def find_optimal_parameters(target_inductance, length_range, turns_range, width_
             continue
         if 2 * n_turns * (trace_width_mm + spacing_mm) >= outer_length_mm:
             continue
-        inductance = compute_coil_inductance(n_turns, outer_length_mm, trace_width_mm, spacing_mm)
+        # inductance = compute_coil_inductance(n_turns, outer_length_mm, trace_width_mm, spacing_mm)
+        inductance = func(n_turns, outer_length_mm, trace_width_mm, spacing_mm)
         difference = abs(inductance - target_inductance)
         
         if difference < best_difference:
